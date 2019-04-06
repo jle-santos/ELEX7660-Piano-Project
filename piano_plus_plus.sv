@@ -10,7 +10,7 @@ module piano_plus_plus (
 
 	logic [2:0] scale;
    
-   screen_module screen_0 (.reset_n, .clk, .inputData, .outScreen);
+    screen_module screen_0 (.reset_n, .clk, .inputData, .outScreen);
 	tone_module tone_0 (.reset_n, .clk, .noteFrequency, .spkr);
 	key_module key_0 (.reset_n, .clk, .KEYBOARD, .scale, .inputData, .noteFrequency, .LED);
 	
@@ -21,7 +21,7 @@ module piano_plus_plus (
 		begin
 			if(reset_n)
 				begin
-				scale <= 3'd1;
+				//scale <= 3'd1;
 				index++;
 				end
 			else

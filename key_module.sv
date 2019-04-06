@@ -1,15 +1,20 @@
 //Gets the key presses, sends the frequencies/screen commands to the control
 
 module key_module (input logic reset_n, clk,
-					  input logic [12:0] KEYBOARD,
-					  input logic [2:0] scale,
-						output logic [9:0] inputData,
-				      output logic [31:0] noteFrequency [12:0],
-						output logic [7:0] LED);
+				  input logic [12:0] KEYBOARD,
+				  input logic [2:0] scale,
+					output logic [9:0] inputData,
+				  output logic [31:0] noteFrequency [12:0],
+					input logic iready,
+					output logic ivalid, 
+					output logic [7:0] LED);
 
 `define IDLE_SOUND '0
 `define PLAY '1
 `define RESET '0
+
+`define VALID '1
+`define NOT_VALID '0
 
 `define START_BIT '0
 `define STOP_BIT '1
@@ -45,6 +50,7 @@ always_comb
 			LED[7] = '0;
 			LED[6] = '0;
 			LED[2:0] = scale;
+			ivalid <= `NOT_VALID;
 			
 			end
 		else
@@ -58,12 +64,18 @@ always_comb
 				if(KEYBOARD[index])
 					begin
 					noteFrequency[index] = ((noteTable[index])/(2*scale)); //Toggling halfway
-					inputData = {`STOP_BIT, keyTable[index], `START_BIT};
+					ivalid <= `VALID;
+					if(iready)
+						inputData = {`STOP_BIT, keyTable[index], `START_BIT};
+					else
+						inputData = '0;
+						
 					LED[6] = '0;
 					LED[2:0] = scale;
 					end
 				else
 					begin
+					ivalid <= `NOT_VALID;
 					inputData = '0;
 					noteFrequency[index] <= '0;
 					LED[6] = '1;

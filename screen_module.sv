@@ -1,8 +1,8 @@
 //Screen module version 2 using UART protocol
 
-module screen_module (input logic reset_n, clk,
-					  output logic outScreen, 
-					  input logic [9:0] inputData);
+module screen_module (input logic reset_n, clk, ovalid
+					  output logic outScreen, oready,
+					  input logic [9:0] inputScreen);
 
 `define BAUD_RATE 5208
 `define START_BIT 10
@@ -10,6 +10,9 @@ module screen_module (input logic reset_n, clk,
 
 `define IDLE '1
 `define TRANSMIT '0
+
+`define NOT_READY '0
+`define READY '1
 
 logic [13:0] divCount, next_divCount;
 logic [3:0] bitCount, next_bitCount;
@@ -45,6 +48,7 @@ always_ff @(posedge clk, negedge reset_n)
 		bitCount <= '0;
 		state <= `IDLE;
 		outScreen <= `IDLE;
+		oready <= `READY;
 		dataBuffer <= '0;
 		end
 	else
@@ -54,13 +58,17 @@ always_ff @(posedge clk, negedge reset_n)
 		
 		case(state)
 			`IDLE : begin
-					if(inputData)
+					if(ovalid)
 						begin
 						state <= `TRANSMIT;
+						oready <= `NOT_READY;
 						dataBuffer <= inputData;
 						end
 					else
+						begin
 						state <= `IDLE;
+						oready <= `READY;
+						end
 						
 					bitCount <= '0;
 					outScreen <= `IDLE;

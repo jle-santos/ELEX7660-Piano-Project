@@ -2,6 +2,8 @@
 					
 module data_module
    ( 
+	 input logic reset_n, clk, 
+	 
      output logic iready,       //Ready/valid input
      input  logic ivalid, 		//Valid input
      input  logic [9:0] idata,	//inputData [UART Formatted]
@@ -9,8 +11,7 @@ module data_module
      input  logic oready,       //Screen idle/transmit check
      output logic ovalid,     	//If the output valid is correct
      output logic [9:0] odata,	//outputData to screen [UART Formatted]
-     
-     input logic reset_n, clk ) ;
+     ) ;
 
    parameter W = 3 ;
    parameter N = 8 ;

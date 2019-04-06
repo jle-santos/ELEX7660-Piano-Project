@@ -3,10 +3,8 @@
 module key_module (input logic reset_n, clk,
 				  input logic [12:0] KEYBOARD,
 				  input logic [2:0] scale,
-					output logic [9:0] inputData,
-				  output logic [31:0] noteFrequency [12:0],
-					input logic iready,
-					output logic ivalid );
+					//output logic [9:0] inputData,
+				  output logic [31:0] noteFrequency [12:0]);
 					//output logic [7:0] LED);
 
 `define IDLE_SOUND '0
@@ -47,12 +45,12 @@ always_comb
 				noteFrequency[index] = '0;
 				end
 			
-			inputData = '0;
+			//inputData = '0;
 			/*LED[7] = '0;
 			LED[6] = '0;
 			LED[2:0] = scale;
 			*/
-			ivalid <= `NOT_VALID;
+			//ivalid <= `NOT_VALID;
 			
 			end
 		else
@@ -67,20 +65,20 @@ always_comb
 					begin
 					noteFrequency[index] = ((noteTable[index])/(2*scale)); //Toggling halfway
 					
-					ivalid <= `VALID;
+					//ivalid <= `VALID;
 					
-					if(iready)
+					/*if(iready)
 						inputData = {`STOP_BIT, 8'h31, `START_BIT};
 					else
-						inputData = '0;
+						inputData = '0;*/
 						
 					//LED[6] = '0;
 					//LED[2:0] = scale;
 					end
 				else
 					begin
-					ivalid <= `NOT_VALID;
-					inputData = '0;
+					//ivalid <= `NOT_VALID;
+					//inputData = '0;
 					noteFrequency[index] <= '0;
 					//LED[6] = '1;
 					//LED[2:0] = scale;

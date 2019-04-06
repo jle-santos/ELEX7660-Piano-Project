@@ -1,11 +1,12 @@
 //Screen module version 2 using UART protocol
 
-module screen_module (input logic reset_n, clk, ovalid
-					  output logic outScreen, oready,
-					  input logic [9:0] inputScreen);
+module screen_module (input logic reset_n, clk,
+					  output logic outScreen,
+					  input logic [2:0] scale
+					  );
 
 `define BAUD_RATE 5208
-`define START_BIT 10
+`define FRAME_BITS 10
 `define VALID_BIT 9
 
 `define IDLE '1
@@ -14,10 +15,17 @@ module screen_module (input logic reset_n, clk, ovalid
 `define NOT_READY '0
 `define READY '1
 
+`define START_BIT '0
+`define STOP_BIT '1
+
 logic [13:0] divCount, next_divCount;
 logic [3:0] bitCount, next_bitCount;
 logic state;
+logic [5:0] index;
 logic [9:0] dataBuffer;
+
+
+logic [7:0] SCALE_TABLE [0:5] = '{8'h53, 8'h41, 8'h41, 8'h4C, 8'h45, 8'h3A};
 
 always_comb
 	begin
@@ -48,7 +56,6 @@ always_ff @(posedge clk, negedge reset_n)
 		bitCount <= '0;
 		state <= `IDLE;
 		outScreen <= `IDLE;
-		oready <= `READY;
 		dataBuffer <= '0;
 		end
 	else
@@ -58,16 +65,14 @@ always_ff @(posedge clk, negedge reset_n)
 		
 		case(state)
 			`IDLE : begin
-					if(ovalid)
+					if(scale)
 						begin
 						state <= `TRANSMIT;
-						oready <= `NOT_READY;
-						dataBuffer <= inputData;
+						dataBuffer <= {`STOP_BIT, SCALE_TABLE[index], `START_BIT};
 						end
 					else
 						begin
 						state <= `IDLE;
-						oready <= `READY;
 						end
 						
 					bitCount <= '0;
@@ -77,14 +82,13 @@ always_ff @(posedge clk, negedge reset_n)
 			
 			`TRANSMIT : begin
 						//Check if it has finished sending the frame
-						if(bitCount >= `START_BIT)
+						if(bitCount >= `FRAME_BITS)
 							state <= `IDLE;
 						else
 							outScreen <= dataBuffer[bitCount];
 						end
 			endcase
 		end
-	
 	end
 
 endmodule 

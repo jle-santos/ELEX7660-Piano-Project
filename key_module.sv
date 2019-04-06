@@ -3,11 +3,9 @@
 module key_module (input logic reset_n, clk,
 				  input logic [12:0] KEYBOARD,
 				  input logic [2:0] scale,
-					output logic [9:0] inputData,
-				  output logic [31:0] noteFrequency [12:0],
-					input logic iready,
-					output logic ivalid, 
-					output logic [7:0] LED);
+					//output logic [9:0] inputData,
+				  output logic [31:0] noteFrequency [12:0]);
+					//output logic [7:0] LED);
 
 `define IDLE_SOUND '0
 `define PLAY '1
@@ -15,9 +13,6 @@ module key_module (input logic reset_n, clk,
 
 `define VALID '1
 `define NOT_VALID '0
-
-`define START_BIT '0
-`define STOP_BIT '1
 
 `define NUM_OF_NOTES 13
 
@@ -29,11 +24,11 @@ logic [31:0] noteTable [12:0] = '{32'd95556, 32'd101238, 32'd107258,
 								32'd191113};											
 
 //ASCII Table
-logic [7:0] keyTable [12:0] = '{8'h43, 8'h42, 8'h61, 
+/*logic [7:0] keyTable [12:0] = '{8'h43, 8'h42, 8'h61, 
 								8'h41, 8'h67, 8'h47, 
 								8'h66, 8'h46, 8'h45,
 								8'h64, 8'h44, 8'h63, 
-								8'h43};
+								8'h43};*/
 								
 logic [3:0] index; 
 	
@@ -46,40 +41,44 @@ always_comb
 				begin
 				noteFrequency[index] = '0;
 				end
+			
 			//inputData = '0;
-			LED[7] = '0;
+			/*LED[7] = '0;
 			LED[6] = '0;
 			LED[2:0] = scale;
-			ivalid <= `NOT_VALID;
+			*/
+			//ivalid <= `NOT_VALID;
 			
 			end
 		else
 		
 			begin
 			
-			LED[7] = '1;
+			//LED[7] = '1;
 			
 			for(index = '0; index < `NUM_OF_NOTES; index++)
 				begin
 				if(KEYBOARD[index])
 					begin
 					noteFrequency[index] = ((noteTable[index])/(2*scale)); //Toggling halfway
-					ivalid <= `VALID;
-					if(iready)
-						inputData = {`STOP_BIT, keyTable[index], `START_BIT};
+					
+					//ivalid <= `VALID;
+					
+					/*if(iready)
+						inputData = {`STOP_BIT, 8'h31, `START_BIT};
 					else
-						inputData = '0;
+						inputData = '0;*/
 						
-					LED[6] = '0;
-					LED[2:0] = scale;
+					//LED[6] = '0;
+					//LED[2:0] = scale;
 					end
 				else
 					begin
-					ivalid <= `NOT_VALID;
-					inputData = '0;
+					//ivalid <= `NOT_VALID;
+					//inputData = '0;
 					noteFrequency[index] <= '0;
-					LED[6] = '1;
-					LED[2:0] = scale;
+					//LED[6] = '1;
+					//LED[2:0] = scale;
 					end
 				end
 			end

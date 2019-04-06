@@ -24,8 +24,12 @@ logic [31:0] noteTable [12:0] = '{32'd95556, 32'd101238, 32'd107258,
 											32'd191113};											
 
 //ASCII Table
-logic [7:0] keyTable [12:0] = '{
-
+logic [7:0] keyTable [12:0] = '{8'h43, 8'h42, 8'h61, 
+								8'h41, 8'h67, 8'h47, 
+								8'h66, 8'h46, 8'h45,
+								8'h64, 8'h44, 8'h63, 
+								8'h43};
+								
 logic [3:0] index; 
 	
 always_comb
@@ -54,6 +58,7 @@ always_comb
 				if(KEYBOARD[index])
 					begin
 					noteFrequency[index] <= ((noteTable[index])/(2*scale)); //Toggling halfway
+					inputData <= {`STOP_BIT, keyTable[index], `START_BIT};
 					LED[6] = '0;
 					LED[2:0] = scale;
 					end

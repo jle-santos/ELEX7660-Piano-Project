@@ -11,6 +11,9 @@ module key_module (input logic reset_n, clk,
 `define PLAY '1
 `define RESET '0
 
+`define START_BIT '0
+`define STOP_BIT '1
+
 `define NUM_OF_NOTES 13
 
 //Note table
@@ -21,6 +24,7 @@ logic [31:0] noteTable [12:0] = '{32'd95556, 32'd101238, 32'd107258,
 											32'd191113};											
 
 //ASCII Table
+logic [7:0] keyTable [12:0] = '{
 
 logic [3:0] index; 
 	

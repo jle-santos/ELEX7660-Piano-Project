@@ -14,9 +14,9 @@ module piano_plus_plus (
 	logic [9:0] idata, odata;
    
     screen_module screen_0 (.reset_n, .clk, .ovalid, .outScreen, .oready, .inputScreen(odata));
-	key_module key_0 (.reset_n, .clk, .KEYBOARD, .scale, .inputData, .noteFrequency, .LED);
+	key_module key_0 (.reset_n, .clk, .KEYBOARD, .scale, .inputData, .noteFrequency);
 	data_module data_0 (.reset_n, .clk, .iready, .ivalid, .idata(inputData),
-						.oready, .ovalid, .odata);
+						.oready, .ovalid, .odata, .LED);
 	tone_module tone_0 (.reset_n, .clk, .noteFrequency, .spkr);
 	
 	logic [3:0] index;
@@ -32,6 +32,7 @@ module piano_plus_plus (
 			else
 				begin
 				scale <= scale_table[index];
+				//inputData <= {'1,8'h31, '0};
 				end	
 		end
 		

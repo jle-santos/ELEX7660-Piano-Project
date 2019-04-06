@@ -11,7 +11,8 @@ module data_module
      input  logic oready,       //Screen idle/transmit check
      output logic ovalid,     	//If the output valid is correct
      output logic [9:0] odata,	//outputData to screen [UART Formatted]
-     ) ;
+	  output logic [7:0] LED
+    ) ;
 
    parameter W = 3 ;
    parameter N = 8 ;
@@ -29,7 +30,7 @@ module data_module
 		nextovalid = ovalid;
 		readyTemp = 0;
 		
-		if(reset) //Reset FIFO, empty
+		if(reset_n) //Reset FIFO, empty
 		begin
 			nextWrite = 0;
 			nextRead = 0;
@@ -66,6 +67,8 @@ module data_module
 			
 			iready <= nextiready;	
 			ovalid <= nextovalid;
+			
+			LED[3:0] <= {ivalid, ovalid, iready, ivalid};
 	   end
    
 endmodule

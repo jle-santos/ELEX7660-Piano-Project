@@ -1,11 +1,12 @@
 //Screen module version 2 using UART protocol
 
-module screen_module (input logic reset_n, clk, ovalid
+module screen_module (input logic reset_n, clk, ovalid,
 					  output logic outScreen, oready,
-					  input logic [9:0] inputScreen);
+					  input logic [9:0] inputScreen
+					  );
 
 `define BAUD_RATE 5208
-`define START_BIT 10
+`define FRAME_BITS 10
 `define VALID_BIT 9
 
 `define IDLE '1
@@ -62,7 +63,7 @@ always_ff @(posedge clk, negedge reset_n)
 						begin
 						state <= `TRANSMIT;
 						oready <= `NOT_READY;
-						dataBuffer <= inputData;
+						dataBuffer <= inputScreen;
 						end
 					else
 						begin
@@ -77,7 +78,7 @@ always_ff @(posedge clk, negedge reset_n)
 			
 			`TRANSMIT : begin
 						//Check if it has finished sending the frame
-						if(bitCount >= `START_BIT)
+						if(bitCount >= `FRAME_BITS)
 							state <= `IDLE;
 						else
 							outScreen <= dataBuffer[bitCount];

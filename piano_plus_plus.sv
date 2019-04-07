@@ -13,21 +13,5 @@ module piano_plus_plus (
 	key_module key_0 (.reset_n, .clk, .KEYBOARD, .scale, .noteFrequency);
 	tone_module tone_0 (.reset_n, .clk, .noteFrequency, .spkr);
 	scale_module scale_0 (.reset_n, .clk, .key, .scale, .LED);
-	
-
-	/*
-	always_ff @(posedge clk)
-		begin
-			if(reset_n)
-				begin
-				//scale <= 3'd1;
-				index++;
-				end
-			else
-				begin
-				scale <= scale_table[index];
-				//inputData <= {'1,8'h31, '0};
-				end	*/
-		//end
 		
 endmodule

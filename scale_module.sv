@@ -9,10 +9,10 @@ module scale_module ( input logic reset_n, clk, key,
 `define FULL_COUNT 9375000
 `define ON 0
 
-logic [32:0] counter;
-logic [32:0] next_counter;
+logic [23:0] counter;
+logic [23:0] next_counter;
 logic [7:0] next_LED;
-logic	[7:0] next_scale;
+logic [7:0] next_scale;
 
 always_comb
 	begin

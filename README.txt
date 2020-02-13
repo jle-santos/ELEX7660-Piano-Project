@@ -3,4 +3,4 @@ FPGA piano project
 
 ELEX 7660 project
 
-BCIT 2019
+![Main](https://github.com/jle-santos/ELEX7660-Piano-Project/blob/master/piano.jpg)
